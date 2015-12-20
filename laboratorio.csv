@@ -1,0 +1,6 @@
+id_laboratorio;id_sede;descripcion_laboratorio;piso_laboratorio
+1;1;Laboratorio principal;3
+2;1;Laboratorio secundario;3
+3;2;Laboratorio principal;2
+4;2;Laboratorio secundario;3
+5;2;Laboratorio auxiliar;4

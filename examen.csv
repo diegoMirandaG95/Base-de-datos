@@ -1,0 +1,10 @@
+id_examen;id_muestra;nombre_examen;descripcion_examen;precio_examen
+1;2;PERFIL DE ELECTROLITOS EN ORINA AISLADA;Instrucciones para la toma del examen;21000
+2;1;Gases y Equilibrio Acido Base en Sangre ARTERIAL;Instrucciones para la toma del examen;22000
+3;1;Gases y Equilibrio Acido Base en Sangre CORDON UMBILICAL;Instrucciones para la toma del examen;23000
+4;1;Glucosa;Instrucciones para la toma del examen;24000
+5;1;Colesterol Total;Instrucciones para la toma del examen;25000
+6;1;Calcio;Instrucciones para la toma del examen;26000
+7;4;Cultivo rutinario de esputo;Instrucciones para la toma del examen;27000
+8;1;ALBUMINA;Instrucciones para la toma del examen;28000
+9;3;Coprocultivo;Instrucciones para la toma del examen;29000

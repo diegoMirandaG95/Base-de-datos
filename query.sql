@@ -1,18 +1,8 @@
-/*==============================================================*/
+﻿/*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     20/12/2015 13:58:27                          */
+/* Created on:     20/12/2015 11:32:45                          */
 /*==============================================================*/
 
-
-drop index RELATIONSHIP_16_FK;
-
-drop index CORREO_PK;
-
-drop table CORREO;
-
-drop index DOMICILIO_PK;
-
-drop table DOMICILIO;
 
 drop index NECESITA_FK;
 
@@ -34,17 +24,13 @@ drop index LABORATORIO_LABORATORISTA_PK;
 
 drop table LABORATORIO_LABORATORISTA;
 
-drop index LABORATORIO_REALIZA_EXAMEN2_FK;
-
-drop index LABORATORIO_REALIZA_EXAMEN_FK;
-
-drop index LABORATORIO_REALIZA_EXAMEN_PK;
-
-drop table LABORATORIO_REALIZA_EXAMEN;
+drop index ES3_FK;
 
 drop index LABORATORISTA_PK;
 
 drop table LABORATORISTA;
+
+drop index ES2_FK;
 
 drop index MEDICO_PK;
 
@@ -62,6 +48,8 @@ drop index MUESTRA_PK;
 
 drop table MUESTRA;
 
+drop index ES_FK;
+
 drop index PACIENTE_PK;
 
 drop table PACIENTE;
@@ -75,6 +63,14 @@ drop index TOMA_FK;
 drop index PACIENTE_EXAMEN_PK;
 
 drop table PACIENTE_EXAMEN;
+
+drop index REALIZA2_FK;
+
+drop index REALIZA_FK;
+
+drop index REALIZA_PK;
+
+drop table REALIZA;
 
 drop index POSEE_RESULTADOS_FK;
 
@@ -92,55 +88,9 @@ drop index TELEFONO_PK;
 
 drop table TELEFONO;
 
-drop index RELATIONSHIP_15_FK;
-
 drop index USUARIO_PK;
 
 drop table USUARIO;
-
-/*==============================================================*/
-/* Table: CORREO                                                */
-/*==============================================================*/
-create table CORREO (
-   NOMBRE_CORREO        VARCHAR(20)          not null,
-   DOMINIO_CORREO       VARCHAR(20)          not null,
-   RUT_USUARIO          DECIMAL              not null,
-   constraint PK_CORREO primary key (NOMBRE_CORREO, DOMINIO_CORREO)
-);
-
-/*==============================================================*/
-/* Index: CORREO_PK                                             */
-/*==============================================================*/
-create unique index CORREO_PK on CORREO (
-NOMBRE_CORREO,
-DOMINIO_CORREO
-);
-
-/*==============================================================*/
-/* Index: RELATIONSHIP_16_FK                                    */
-/*==============================================================*/
-create  index RELATIONSHIP_16_FK on CORREO (
-RUT_USUARIO
-);
-
-/*==============================================================*/
-/* Table: DOMICILIO                                             */
-/*==============================================================*/
-create table DOMICILIO (
-   ID_DOMICILIO         INT4                 not null,
-   AVENIDA_CALLE_DOMICILIO VARCHAR(40)          null,
-   NUMERO_DOMICILIO     INT4                 null,
-   COMUNA_DOMICILIO     VARCHAR(20)          null,
-   CIUDAD_DOMICILIO     VARCHAR(20)          null,
-   constraint PK_DOMICILIO primary key (ID_DOMICILIO)
-);
-
-/*==============================================================*/
-/* Index: DOMICILIO_PK                                          */
-/*==============================================================*/
-create unique index DOMICILIO_PK on DOMICILIO (
-ID_DOMICILIO
-);
 
 /*==============================================================*/
 /* Table: EXAMEN                                                */
@@ -201,8 +151,9 @@ ID_SEDE
 /*==============================================================*/
 create table LABORATORIO_LABORATORISTA (
    ID_OPERACION         INT4                 not null,
-   ID_LABORATORIO       INT4                 null,
    RUT_USUARIO          DECIMAL              not null,
+   IDENTIFICADOR_LABORATORISTA VARCHAR(4)           not null,
+   ID_LABORATORIO       INT4                 null,
    HORA_APERTURA        TIME                 null,
    HORA_CIERRE          TIME                 null,
    constraint PK_LABORATORIO_LABORATORISTA primary key (ID_OPERACION)
@@ -219,7 +170,8 @@ ID_OPERACION
 /* Index: TRABAJA_FK                                            */
 /*==============================================================*/
 create  index TRABAJA_FK on LABORATORIO_LABORATORISTA (
-RUT_USUARIO
+RUT_USUARIO,
+IDENTIFICADOR_LABORATORISTA
 );
 
 /*==============================================================*/
@@ -230,51 +182,26 @@ ID_LABORATORIO
 );
 
 /*==============================================================*/
-/* Table: LABORATORIO_REALIZA_EXAMEN                            */
-/*==============================================================*/
-create table LABORATORIO_REALIZA_EXAMEN (
-   ID_LABORATORIO       INT4                 not null,
-   ID_EXAMEN            INT4                 not null,
-   constraint PK_LABORATORIO_REALIZA_EXAMEN primary key (ID_LABORATORIO, ID_EXAMEN)
-);
-
-/*==============================================================*/
-/* Index: LABORATORIO_REALIZA_EXAMEN_PK                         */
-/*==============================================================*/
-create unique index LABORATORIO_REALIZA_EXAMEN_PK on LABORATORIO_REALIZA_EXAMEN (
-ID_LABORATORIO,
-ID_EXAMEN
-);
-
-/*==============================================================*/
-/* Index: LABORATORIO_REALIZA_EXAMEN_FK                         */
-/*==============================================================*/
-create  index LABORATORIO_REALIZA_EXAMEN_FK on LABORATORIO_REALIZA_EXAMEN (
-ID_LABORATORIO
-);
-
-/*==============================================================*/
-/* Index: LABORATORIO_REALIZA_EXAMEN2_FK                        */
-/*==============================================================*/
-create  index LABORATORIO_REALIZA_EXAMEN2_FK on LABORATORIO_REALIZA_EXAMEN (
-ID_EXAMEN
-);
-
-/*==============================================================*/
 /* Table: LABORATORISTA                                         */
 /*==============================================================*/
 create table LABORATORISTA (
    RUT_USUARIO          DECIMAL              not null,
    IDENTIFICADOR_LABORATORISTA VARCHAR(4)           not null,
-   INSTITUCION_EGRESO_LABO_ VARCHAR(20)          null,
-   ANTECEDENTES_LABORATORISTA VARCHAR(300)         null,
-   constraint PK_LABORATORISTA primary key (RUT_USUARIO)
+   constraint PK_LABORATORISTA primary key (RUT_USUARIO, IDENTIFICADOR_LABORATORISTA)
 );
 
 /*==============================================================*/
 /* Index: LABORATORISTA_PK                                      */
 /*==============================================================*/
 create unique index LABORATORISTA_PK on LABORATORISTA (
+RUT_USUARIO,
+IDENTIFICADOR_LABORATORISTA
+);
+
+/*==============================================================*/
+/* Index: ES3_FK                                                */
+/*==============================================================*/
+create  index ES3_FK on LABORATORISTA (
 RUT_USUARIO
 );
 
@@ -284,15 +211,21 @@ RUT_USUARIO
 create table MEDICO (
    RUT_USUARIO          DECIMAL              not null,
    IDENTIFICADOR_MEDICO VARCHAR(4)           not null,
-   INSTITUCION_EGRESO_MEDICO VARCHAR(20)          null,
-   ANTECEDENTES_MEDICO  VARCHAR(300)         null,
-   constraint PK_MEDICO primary key (RUT_USUARIO)
+   constraint PK_MEDICO primary key (RUT_USUARIO, IDENTIFICADOR_MEDICO)
 );
 
 /*==============================================================*/
 /* Index: MEDICO_PK                                             */
 /*==============================================================*/
 create unique index MEDICO_PK on MEDICO (
+RUT_USUARIO,
+IDENTIFICADOR_MEDICO
+);
+
+/*==============================================================*/
+/* Index: ES2_FK                                                */
+/*==============================================================*/
+create  index ES2_FK on MEDICO (
 RUT_USUARIO
 );
 
@@ -301,8 +234,10 @@ RUT_USUARIO
 /*==============================================================*/
 create table MEDICO_PACIENTE (
    FECHA_CONSULTA       DATE                 not null,
-   RUT_USUARIO          DECIMAL              not null,
    PAC_RUT_USUARIO      DECIMAL              null,
+   IDENTIFICADOR_PACIENTE VARCHAR(4)           null,
+   RUT_USUARIO          DECIMAL              not null,
+   IDENTIFICADOR_MEDICO VARCHAR(4)           not null,
    HORA_CONSULTA        TIME                 null,
    constraint PK_MEDICO_PACIENTE primary key (FECHA_CONSULTA)
 );
@@ -318,14 +253,16 @@ FECHA_CONSULTA
 /* Index: AGREGA_FK                                             */
 /*==============================================================*/
 create  index AGREGA_FK on MEDICO_PACIENTE (
-RUT_USUARIO
+RUT_USUARIO,
+IDENTIFICADOR_MEDICO
 );
 
 /*==============================================================*/
 /* Index: ES_AGREGADO_FK                                        */
 /*==============================================================*/
 create  index ES_AGREGADO_FK on MEDICO_PACIENTE (
-PAC_RUT_USUARIO
+PAC_RUT_USUARIO,
+IDENTIFICADOR_PACIENTE
 );
 
 /*==============================================================*/
@@ -352,14 +289,21 @@ ID_MUESTRA
 create table PACIENTE (
    RUT_USUARIO          DECIMAL              not null,
    IDENTIFICADOR_PACIENTE VARCHAR(4)           not null,
-   ESTADO_GRAVEDAD_PACIENTE VARCHAR(1)           null,
-   constraint PK_PACIENTE primary key (RUT_USUARIO)
+   constraint PK_PACIENTE primary key (RUT_USUARIO, IDENTIFICADOR_PACIENTE)
 );
 
 /*==============================================================*/
 /* Index: PACIENTE_PK                                           */
 /*==============================================================*/
 create unique index PACIENTE_PK on PACIENTE (
+RUT_USUARIO,
+IDENTIFICADOR_PACIENTE
+);
+
+/*==============================================================*/
+/* Index: ES_FK                                                 */
+/*==============================================================*/
+create  index ES_FK on PACIENTE (
 RUT_USUARIO
 );
 
@@ -368,15 +312,16 @@ RUT_USUARIO
 /*==============================================================*/
 create table PACIENTE_EXAMEN (
    ID_PACIENTE_EXAMEN   INT4                 not null,
-   ID_EXAMEN            INT4                 null,
    RUT_USUARIO          DECIMAL              not null,
+   IDENTIFICADOR_MEDICO VARCHAR(4)           not null,
    PAC_RUT_USUARIO      DECIMAL              not null,
+   IDENTIFICADOR_PACIENTE VARCHAR(4)           not null,
+   ID_EXAMEN            INT4                 null,
    ESTADO_EXAMEN        VARCHAR(12)          null,
    REALIZADO            BOOL                 null,
    FECHA_CADUCACION_EXAMEN DATE                 null,
    HORA_CADUCACION      TIME                 null,
    FECHA_REALIZACION    DATE                 null,
-   CADUCO               BOOL                 null,
    constraint PK_PACIENTE_EXAMEN primary key (ID_PACIENTE_EXAMEN)
 );
 
@@ -391,14 +336,16 @@ ID_PACIENTE_EXAMEN
 /* Index: TOMA_FK                                               */
 /*==============================================================*/
 create  index TOMA_FK on PACIENTE_EXAMEN (
-PAC_RUT_USUARIO
+PAC_RUT_USUARIO,
+IDENTIFICADOR_PACIENTE
 );
 
 /*==============================================================*/
 /* Index: RECOMIENDA_FK                                         */
 /*==============================================================*/
 create  index RECOMIENDA_FK on PACIENTE_EXAMEN (
-RUT_USUARIO
+RUT_USUARIO,
+IDENTIFICADOR_MEDICO
 );
 
 /*==============================================================*/
@@ -409,19 +356,53 @@ ID_EXAMEN
 );
 
 /*==============================================================*/
+/* Table: REALIZA                                               */
+/*==============================================================*/
+create table REALIZA (
+   ID_LABORATORIO       INT4                 not null,
+   ID_EXAMEN            INT4                 not null,
+   constraint PK_REALIZA primary key (ID_LABORATORIO, ID_EXAMEN)
+);
+
+/*==============================================================*/
+/* Index: REALIZA_PK                                            */
+/*==============================================================*/
+create unique index REALIZA_PK on REALIZA (
+ID_LABORATORIO,
+ID_EXAMEN
+);
+
+/*==============================================================*/
+/* Index: REALIZA_FK                                            */
+/*==============================================================*/
+create  index REALIZA_FK on REALIZA (
+ID_LABORATORIO
+);
+
+/*==============================================================*/
+/* Index: REALIZA2_FK                                           */
+/*==============================================================*/
+create  index REALIZA2_FK on REALIZA (
+ID_EXAMEN
+);
+
+/*==============================================================*/
 /* Table: RESULTADOS_EXAMENES                                   */
 /*==============================================================*/
 create table RESULTADOS_EXAMENES (
-   ID_PACIENTE_EXAMEN   INT4                 null,
+   ID_PACIENTE_EXAMEN   INT4                 not null,
    RUT_USUARIO          DECIMAL              not null,
-   DESCRIPCION_RESULTADO VARCHAR(200)         not null
+   IDENTIFICADOR_LABORATORISTA VARCHAR(4)           not null,
+   DESCRIPCION_RESULTADO VARCHAR(200)         null,
+   constraint PK_RESULTADOS_EXAMENES primary key (ID_PACIENTE_EXAMEN, RUT_USUARIO, IDENTIFICADOR_LABORATORISTA)
 );
 
 /*==============================================================*/
 /* Index: SUBE_RESULTADOS_FK                                    */
 /*==============================================================*/
 create  index SUBE_RESULTADOS_FK on RESULTADOS_EXAMENES (
-RUT_USUARIO
+RUT_USUARIO,
+IDENTIFICADOR_LABORATORISTA
 );
 
 /*==============================================================*/
@@ -480,17 +461,10 @@ RUT_USUARIO
 /*==============================================================*/
 create table USUARIO (
    RUT_USUARIO          DECIMAL              not null,
-   ID_DOMICILIO         INT4                 null,
    PRIMER_NOMBRE_PERSONA VARCHAR(20)          null,
    SEGUNDO_NOMBRE_PERSONA VARCHAR(20)          null,
    APELLIDO_PATERNO_PERSONA VARCHAR(20)          null,
    APELLIDO_MATERNO_PERSONA VARCHAR(20)          null,
-   FECHA_DE_NACIMIENTO  DATE                 null,
-   FECHA_INGRESO        DATE                 null,
-   PREVISION            VARCHAR(20)          null,
-   HORA_INGRESO         TIME                 null,
-   ESTADO_CIVIL         VARCHAR(20)          null,
-   GRUPO_SANGUINEO      VARCHAR(4)           null,
    constraint PK_USUARIO primary key (RUT_USUARIO)
 );
 
@@ -500,18 +474,6 @@ create table USUARIO (
 create unique index USUARIO_PK on USUARIO (
 RUT_USUARIO
 );
-
-/*==============================================================*/
-/* Index: RELATIONSHIP_15_FK                                    */
-/*==============================================================*/
-create  index RELATIONSHIP_15_FK on USUARIO (
-ID_DOMICILIO
-);
-
-alter table CORREO
-   add constraint FK_CORREO_RELATIONS_USUARIO foreign key (RUT_USUARIO)
-      references USUARIO (RUT_USUARIO)
-      on delete restrict on update restrict;
 
 alter table EXAMEN
    add constraint FK_EXAMEN_NECESITA_MUESTRA foreign key (ID_MUESTRA)
@@ -529,18 +491,8 @@ alter table LABORATORIO_LABORATORISTA
       on delete restrict on update restrict;
 
 alter table LABORATORIO_LABORATORISTA
-   add constraint FK_LABORATO_TRABAJA_LABORATO foreign key (RUT_USUARIO)
-      references LABORATORISTA (RUT_USUARIO)
-      on delete restrict on update restrict;
-
-alter table LABORATORIO_REALIZA_EXAMEN
-   add constraint FK_LABORATO_LABORATOR_LABORATO foreign key (ID_LABORATORIO)
-      references LABORATORIO (ID_LABORATORIO)
-      on delete restrict on update restrict;
-
-alter table LABORATORIO_REALIZA_EXAMEN
-   add constraint FK_LABORATO_LABORATOR_EXAMEN foreign key (ID_EXAMEN)
-      references EXAMEN (ID_EXAMEN)
+   add constraint FK_LABORATO_TRABAJA_LABORATO foreign key (RUT_USUARIO, IDENTIFICADOR_LABORATORISTA)
+      references LABORATORISTA (RUT_USUARIO, IDENTIFICADOR_LABORATORISTA)
       on delete restrict on update restrict;
 
 alter table LABORATORISTA
@@ -554,13 +506,13 @@ alter table MEDICO
       on delete restrict on update restrict;
 
 alter table MEDICO_PACIENTE
-   add constraint FK_MEDICO_P_AGREGA_MEDICO foreign key (RUT_USUARIO)
-      references MEDICO (RUT_USUARIO)
+   add constraint FK_MEDICO_P_AGREGA_MEDICO foreign key (RUT_USUARIO, IDENTIFICADOR_MEDICO)
+      references MEDICO (RUT_USUARIO, IDENTIFICADOR_MEDICO)
       on delete restrict on update restrict;
 
 alter table MEDICO_PACIENTE
-   add constraint FK_MEDICO_P_ES_AGREGA_PACIENTE foreign key (PAC_RUT_USUARIO)
-      references PACIENTE (RUT_USUARIO)
+   add constraint FK_MEDICO_P_ES_AGREGA_PACIENTE foreign key (PAC_RUT_USUARIO, IDENTIFICADOR_PACIENTE)
+      references PACIENTE (RUT_USUARIO, IDENTIFICADOR_PACIENTE)
       on delete restrict on update restrict;
 
 alter table PACIENTE
@@ -574,13 +526,23 @@ alter table PACIENTE_EXAMEN
       on delete restrict on update restrict;
 
 alter table PACIENTE_EXAMEN
-   add constraint FK_PACIENTE_RECOMIEND_MEDICO foreign key (RUT_USUARIO)
-      references MEDICO (RUT_USUARIO)
+   add constraint FK_PACIENTE_RECOMIEND_MEDICO foreign key (RUT_USUARIO, IDENTIFICADOR_MEDICO)
+      references MEDICO (RUT_USUARIO, IDENTIFICADOR_MEDICO)
       on delete restrict on update restrict;
 
 alter table PACIENTE_EXAMEN
-   add constraint FK_PACIENTE_TOMA_PACIENTE foreign key (PAC_RUT_USUARIO)
-      references PACIENTE (RUT_USUARIO)
+   add constraint FK_PACIENTE_TOMA_PACIENTE foreign key (PAC_RUT_USUARIO, IDENTIFICADOR_PACIENTE)
+      references PACIENTE (RUT_USUARIO, IDENTIFICADOR_PACIENTE)
+      on delete restrict on update restrict;
+
+alter table REALIZA
+   add constraint FK_REALIZA_REALIZA_LABORATO foreign key (ID_LABORATORIO)
+      references LABORATORIO (ID_LABORATORIO)
+      on delete restrict on update restrict;
+
+alter table REALIZA
+   add constraint FK_REALIZA_REALIZA2_EXAMEN foreign key (ID_EXAMEN)
+      references EXAMEN (ID_EXAMEN)
       on delete restrict on update restrict;
 
 alter table RESULTADOS_EXAMENES
@@ -589,17 +551,12 @@ alter table RESULTADOS_EXAMENES
       on delete restrict on update restrict;
 
 alter table RESULTADOS_EXAMENES
-   add constraint FK_RESULTAD_SUBE_RESU_LABORATO foreign key (RUT_USUARIO)
-      references LABORATORISTA (RUT_USUARIO)
+   add constraint FK_RESULTAD_SUBE_RESU_LABORATO foreign key (RUT_USUARIO, IDENTIFICADOR_LABORATORISTA)
+      references LABORATORISTA (RUT_USUARIO, IDENTIFICADOR_LABORATORISTA)
       on delete restrict on update restrict;
 
 alter table TELEFONO
    add constraint FK_TELEFONO_RELATIONS_USUARIO foreign key (RUT_USUARIO)
       references USUARIO (RUT_USUARIO)
-      on delete restrict on update restrict;
-
-alter table USUARIO
-   add constraint FK_USUARIO_RELATIONS_DOMICILI foreign key (ID_DOMICILIO)
-      references DOMICILIO (ID_DOMICILIO)
       on delete restrict on update restrict;
 

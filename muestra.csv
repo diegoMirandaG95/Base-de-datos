@@ -1,0 +1,5 @@
+id_muestra;descripcion_muestra;tipo_muestra;tiempo_muestra
+1;Muestra de sangre;Sangre;15
+2;Muestra de orina;Orina;10
+3;Muestra de deposiciones;Deposiciones;15
+4;Muestra de expectoraciones;Expectoracion;20
